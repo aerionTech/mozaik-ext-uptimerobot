@@ -8,26 +8,35 @@ class Monitors extends Component {
     constructor(props) {
         super(props);
         
-        this.state = { count: 0 };
+        this.state = { data: "" };
     }
 
     // Before the component is mounted, the mixin will search for this method on the component.
     // This method MUST return an object with an `id` property.
-    // It tells Mozaïk that this component is interested in data coming from `sample` generated with `sampleMethod`
+    // It tells Mozaïk that this component is interested in data coming from `uptimerobot` generated with `getMonitors`
     // The `id` MUST be unique across all Mozaïk extensions.
     getApiRequest() {
-        return { id: 'sample.sampleMethod' };
+        return { id: 'uptimerobot.getMonitors' };
     }
 
     // This method is automatically invoked each time the `sample.sampleMethod` has fetched some data. 
     // This assumes your method will return an object containing a `count` property.
     onApiData(data) {
-        console.log(data);
-        this.setState({ count: data.count });
+        this.setState({ data: data.monitors });
+    }
+
+    renderUls()
+    {
+        let data = this.state.data || [];
+        let uls = data.map((x)=> {
+            return (<li>{x.friendly_name}</li>);
+        });
+        return uls;
     }
 
     render() {
-        const { count } = this.state;       
+        const { monitors } = this.state;
+        console.log(monitors);
 
         return (
         <div>
@@ -36,7 +45,9 @@ class Monitors extends Component {
             <i className="fa fa-arrow-up" />
             </div>
             <div className="widget__body">
-                <h2>{count}</h2>
+                <ul>
+                    {this.renderUls()}
+                </ul>
             </div>
         </div>
         );

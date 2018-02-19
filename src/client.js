@@ -6,14 +6,16 @@ import UptimeRobot from 'uptimerobot-apiv2';
 // it's usefull to use the builtin Mozaïk logger for example.
 // This function MUST return an object whose keys correspond to all available operations.
 const client = mozaik => {
-    mozaik.loadApiConfig(config);
-    var apiKey = config.get(uptimerobot.uptimerobotAPIKey);
-    const uptimerobot = new UptimeRobot(apiKey);
-    uptimerobot.getMonitors().then(data => {
-        console.log(data);
-        return Promise.resolve(data);       
-    });
-    
+    return {
+        // This function MUST return a promise.
+        getMonitors() {
+            mozaik.loadApiConfig(config);
+            var apiKey = config.get('uptimerobot.uptimerobotAPIKey');
+            const uptimerobot = new UptimeRobot(apiKey);
+            var data = uptimerobot.getMonitors();
+            return Promise.resolve(data);       
+        }
+    }    
 };
 
 export default client;
