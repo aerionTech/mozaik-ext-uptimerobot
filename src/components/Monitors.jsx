@@ -16,10 +16,20 @@ class Monitors extends Component {
     // It tells Mozaïk that this component is interested in data coming from `uptimerobot` generated with `getMonitors`
     // The `id` MUST be unique across all Mozaïk extensions.
     getApiRequest() {
-        return { id: 'uptimerobot.getMonitors' };
+        let params = {};
+    
+        // Only want to set statuses params if we have statuses
+        if (this.props.statuses) {
+            params.statuses = this.props.statuses;
+        }
+
+        return { 
+            id: 'uptimerobot.getMonitors', 
+            params: params
+        };
     }
 
-    // This method is automatically invoked each time the `sample.sampleMethod` has fetched some data. 
+    // This method is automatically invoked each time the `uptimerobot.getMonitors` has fetched some data. 
     // This assumes your method will return an object containing a `count` property.
     onApiData(data) {
         this.setState({ data: data.monitors });
@@ -28,8 +38,11 @@ class Monitors extends Component {
     renderUls()
     {
         let data = this.state.data || [];
+        console.log(data);
         let uls = data.map((x)=> {
-            return (<li>{x.friendly_name}</li>);
+            let itemClass = x.status == 9 ? "fa fa-arrow-down" : "fa fa-arrow-up";
+            console.log(itemClass);
+            return (<li className="monitor"><i className={itemClass}></i>{x.friendly_name}</li>);
         });
         return uls;
     }
@@ -44,8 +57,8 @@ class Monitors extends Component {
             Uptime Robot
             <i className="fa fa-arrow-up" />
             </div>
-            <div className="widget__body">
-                <ul>
+            <div className="widget__body uptimerobot">
+                <ul className="monitor-list">
                     {this.renderUls()}
                 </ul>
             </div>
@@ -53,6 +66,11 @@ class Monitors extends Component {
         );
     }
 }
+
+
+Monitors.propTypes = {
+    statuses: React.PropTypes.string
+};
 
 // apply the mixins on the component
 reactMixin(Monitors.prototype, ListenerMixin);

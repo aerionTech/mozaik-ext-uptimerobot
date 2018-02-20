@@ -7,12 +7,13 @@ import UptimeRobot from 'uptimerobot-apiv2';
 // This function MUST return an object whose keys correspond to all available operations.
 const client = mozaik => {
     return {
+        // Remember the request id `uptimerobot.getMonitors`.
         // This function MUST return a promise.
-        getMonitors() {
+        getMonitors(params) {
             mozaik.loadApiConfig(config);
             var apiKey = config.get('uptimerobot.uptimerobotAPIKey');
             const uptimerobot = new UptimeRobot(apiKey);
-            var data = uptimerobot.getMonitors();
+            var data = uptimerobot.getMonitors(params);
             return Promise.resolve(data);       
         }
     }    
