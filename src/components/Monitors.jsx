@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import reactMixin           from 'react-mixin';    // to be able to use Mixins on es6 classes
-import { ListenerMixin }    from 'reflux';         // see https://github.com/reflux/refluxjs#convenience-mixin-for-react
-import Mozaik               from 'mozaik/browser';
+import reactMixin from 'react-mixin';    // to be able to use Mixins on es6 classes
+import { ListenerMixin } from 'reflux';         // see https://github.com/reflux/refluxjs#convenience-mixin-for-react
+import Mozaik from 'mozaik/browser';
 
 class Monitors extends Component {
     // we extend the constructor to set a default state 
     constructor(props) {
         super(props);
-        
+
         this.state = { data: "" };
     }
 
@@ -17,14 +17,14 @@ class Monitors extends Component {
     // The `id` MUST be unique across all Mozaïk extensions.
     getApiRequest() {
         let params = {};
-    
+
         // Only want to set statuses params if we have statuses
         if (this.props.statuses) {
             params.statuses = this.props.statuses;
         }
 
-        return { 
-            id: 'uptimerobot.getMonitors', 
+        return {
+            id: 'uptimerobot.getMonitors',
             params: params
         };
     }
@@ -35,16 +35,20 @@ class Monitors extends Component {
         this.setState({ data: data.monitors });
     }
 
-    renderUls()
-    {
+    renderUls() {
         let data = this.state.data || [];
-        console.log(data);
-        let uls = data.map((x)=> {
-            let itemClass = x.status == 9 ? "fa fa-arrow-down" : "fa fa-arrow-up";
-            console.log(itemClass);
-            return (<li className="monitor"><i className={itemClass}></i>{x.friendly_name}</li>);
-        });
-        return uls;
+
+        if (data.length > 0) {
+            let uls = data.map((x) => {
+                let itemClass = x.status == 9 ? "fa fa-arrow-down" : "fa fa-arrow-up";
+                return (<li className="monitor"><i className={itemClass}></i>{x.friendly_name}</li>);
+            });
+
+            return uls;
+        }
+        else {
+            return (<li>No monitors to show.</li>)
+        }
     }
 
     render() {
@@ -52,17 +56,17 @@ class Monitors extends Component {
         console.log(monitors);
 
         return (
-        <div>
-            <div className="widget__header">
-            Uptime Robot
+            <div>
+                <div className="widget__header">
+                    Uptime Robot
             <i className="fa fa-arrow-up" />
+                </div>
+                <div className="widget__body uptimerobot">
+                    <ul className="monitor-list">
+                        {this.renderUls()}
+                    </ul>
+                </div>
             </div>
-            <div className="widget__body uptimerobot">
-                <ul className="monitor-list">
-                    {this.renderUls()}
-                </ul>
-            </div>
-        </div>
         );
     }
 }
