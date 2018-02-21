@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import reactMixin from 'react-mixin';    // to be able to use Mixins on es6 classes
+import reactMixin from 'react-mixin';           // to be able to use Mixins on es6 classes
 import { ListenerMixin } from 'reflux';         // see https://github.com/reflux/refluxjs#convenience-mixin-for-react
 import Mozaik from 'mozaik/browser';
 
