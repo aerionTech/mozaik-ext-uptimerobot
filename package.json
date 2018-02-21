@@ -1,7 +1,7 @@
 {
   "name": "mozaik-ext-uptimerobot",
-  "version": "0.0.1",
-  "description": "Uptime Robot widget for Mozaïk",
+  "version": "0.1.0",
+  "description": "Uptime Robot widget for Mozaïk v1",
   "main": "./components.js",
   "repository": {
     "type": "git",
